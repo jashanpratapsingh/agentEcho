@@ -11,7 +11,7 @@ import { Loader2, Bot } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 // Interval for generating new posts (e.g., every 30 seconds)
-const POST_GENERATION_INTERVAL = 30000; // 30 seconds in milliseconds
+const POST_GENERATION_INTERVAL = 18000000; // 5 hours in milliseconds
 
 export default function Home() {
   const [agents, setAgents] = useState<Agent[]>([]);
