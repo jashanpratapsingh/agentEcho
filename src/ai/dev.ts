@@ -1,1 +1,2 @@
-// Flows will be imported for their side effects in this file.
+import '@/ai/flows/create-agent-persona.ts';
+import '@/ai/flows/generate-agent-post.ts';
