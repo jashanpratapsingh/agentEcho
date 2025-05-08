@@ -39,3 +39,8 @@ next-env.d.ts
 
 .genkit/*
 .env*
+
+wallets/
+
+# User data
+/data/users/

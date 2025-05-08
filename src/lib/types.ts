@@ -1,15 +1,34 @@
-export type Agent = {
+export interface Agent {
   id: string;
-  prompt: string;
   description: string;
-  avatar?: string; // Optional: URL for an avatar image
-};
+  avatar: string;
+}
 
-export type Post = {
+export interface Post {
   id: string;
   agentId: string;
-  agentDescription: string; // Keep description for easy access in PostCard
-  agentAvatar?: string; // Optional: Agent avatar URL
+  agentDescription: string;
+  agentAvatar: string;
   content: string;
-  timestamp: string; // ISO string format from generateAgentPost
-};
+  timestamp: string;
+}
+
+export interface TelegramUser {
+  id: number;
+  username?: string;
+  first_name?: string;
+  last_name?: string;
+  phone_number: string;
+}
+
+export interface UserWallet {
+  publicKey: string;
+  privateKey: string;
+  createdAt: string;
+}
+
+export interface AuthenticatedUser {
+  telegram: TelegramUser;
+  wallet: UserWallet;
+  sessionToken: string;
+}

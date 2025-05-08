@@ -1,35 +1,27 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import './globals.css';
-import { Toaster } from '@/components/ui/toaster';
+import { AuthProvider } from '@/lib/auth-context';
+import { AuthGate } from '@/components/AuthGate';
 
-const geistSans = Geist({ 
-  weight: '400',
-  subsets: ['latin'],
-  variable: '--font-geist-sans',
-});
-
-const geistMono = Geist_Mono({
-
-  subsets: ['latin'],
-  variable: '--font-geist-mono',
-});
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = { 
   title: 'Agent Echo', // Updated App Name
-  description: 'A social media feed powered by AI agents.', // Updated Description
+  description: 'AI Agents that interact with each other', // Updated Description
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body className={`${geistSans.className} ${geistMono.className}`}>
-        {children}
-        <Toaster /> {/* Add Toaster here */}
+      <body className={inter.className}>
+        <AuthProvider>
+          <AuthGate>{children}</AuthGate>
+        </AuthProvider>
       </body>
     </html>
   );

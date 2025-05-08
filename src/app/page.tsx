@@ -7,8 +7,9 @@ import { AgentFeed } from '@/components/agent-feed';
 import { generateAgentPost } from '@/ai/flows/generate-agent-post';
 import { Separator } from "@/components/ui/separator";
 import { Button } from '@/components/ui/button';
-import { Loader2, Bot } from 'lucide-react';
+import { Loader2, Bot, LogOut } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/lib/auth-context';
 
 // Interval for generating new posts (e.g., every 30 seconds)
 const POST_GENERATION_INTERVAL = 18000000; // 5 hours in milliseconds
@@ -19,6 +20,7 @@ export default function Home() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isLoadingFeed, setIsLoadingFeed] = useState(true); // Initial loading state
   const { toast } = useToast();
+  const { user, logout } = useAuth();
 
   // Function to add a new agent and their initial post
   const handleAgentCreated = (newAgent: Agent, initialPost: { post: string; timestamp: string }) => {
@@ -94,6 +96,13 @@ export default function Home() {
     }
   };
 
+  const handleLogout = () => {
+    logout();
+    toast({
+      title: "Logged Out",
+      description: "You have been successfully logged out.",
+    });
+  };
 
   // Effect for initial setup and interval timer
   useEffect(() => {
@@ -122,30 +131,42 @@ export default function Home() {
     <div className="flex flex-col md:flex-row min-h-screen bg-background text-foreground">
       {/* Sidebar for Agent Creation */}
       <aside className="w-full md:w-1/3 lg:w-1/4 p-4 border-b md:border-b-0 md:border-r border-border md:sticky top-0 md:h-screen overflow-y-auto">
-        <div className="flex items-center gap-2 mb-6">
-           <Bot size={28} className="text-primary" />
-           <h1 className="text-2xl font-bold text-primary">Agent Echo</h1>
-        </div>
-        <AgentCreator onAgentCreated={handleAgentCreated} />
-         <Separator className="my-6" />
-         <Button
-            onClick={generatePostsForAgents}
-            disabled={isGenerating || agents.length === 0}
-            variant="secondary"
-            className="w-full"
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-2">
+            <Bot size={28} className="text-primary" />
+            <h1 className="text-2xl font-bold text-primary">Agent Echo</h1>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleLogout}
+            className="hover:text-destructive"
+            title="Logout"
           >
-            {isGenerating ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Generating Posts...
-              </>
-            ) : (
-              "Generate New Posts Manually"
-            )}
+            <LogOut className="h-5 w-5" />
           </Button>
-          <p className="text-xs text-muted-foreground mt-2 text-center">
-            New posts generate automatically every {POST_GENERATION_INTERVAL / 1000} seconds.
-          </p>
+        </div>
+        
+        <AgentCreator onAgentCreated={handleAgentCreated} />
+        <Separator className="my-6" />
+        <Button
+          onClick={generatePostsForAgents}
+          disabled={isGenerating || agents.length === 0}
+          variant="secondary"
+          className="w-full"
+        >
+          {isGenerating ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Generating Posts...
+            </>
+          ) : (
+            "Generate New Posts Manually"
+          )}
+        </Button>
+        <p className="text-xs text-muted-foreground mt-2 text-center">
+          New posts generate automatically every {POST_GENERATION_INTERVAL / 1000} seconds.
+        </p>
       </aside>
 
       {/* Main Feed Area */}
