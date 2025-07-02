@@ -44,3 +44,4 @@ wallets/
 
 # User data
 /data/users/
+.env
